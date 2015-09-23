@@ -32,21 +32,43 @@ $(function() {
          * and that the URL is not empty.
          */
 
+         it('each feed has non-empty URL', function() {
+            allFeeds.forEach(function(feed) {
+                //Check url is defined and not null
+                expect(feed.url).toBeDefined();
+                expect(feed.url).not.toBeNull();
+            });
+         });
+
 
         /* TODO: Write a test that loops through each feed
          * in the allFeeds object and ensures it has a name defined
          * and that the name is not empty.
          */
+
+         it('each feed has non-empty name', function() {
+            allFeeds.forEach(function(feed) {
+                //Check name is defined and not null
+                expect(feed.name).toBeDefined();
+                expect(feed.name).not.toBeNull();
+            });
+         });
     });
 
 
     /* TODO: Write a new test suite named "The menu" */
-
+    describe('The menu', function() {
+        
         /* TODO: Write a test that ensures the menu element is
          * hidden by default. You'll have to analyze the HTML and
          * the CSS to determine how we're performing the
          * hiding/showing of the menu element.
          */
+
+         it('menu is hidden by default', function() {
+            //Test if body element has the 'menu-hidden' class which hides the menu
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+         });
 
          /* TODO: Write a test that ensures the menu changes
           * visibility when the menu icon is clicked. This test
@@ -54,7 +76,20 @@ $(function() {
           * clicked and does it hide when clicked again.
           */
 
+          it('menu should toggle on click', function() {
+            //Use jQuery to perform click action
+            $('.menu-icon-link').click();
+            //After initial click - menu should be displayed via removal of 'menu-hidden' class
+            expect($('body').hasClass('menu-hidden')).toBe(false);
+            //Use jQuery to perform click action
+            $('.menu-icon-link').click();
+            //After second click - menu should be hidden via addition of 'menu-hidden' class
+            expect($('body').hasClass('menu-hidden')).toBe(true);
+          });
+    });
+
     /* TODO: Write a new test suite named "Initial Entries" */
+    describe('Initial Entries', function() {
 
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
@@ -63,10 +98,55 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
 
-    /* TODO: Write a new test suite named "New Feed Selection"
+         beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+         });
+
+         it('at least one entry element after loadFeed', function(done) {
+            //Use jQuery to get the array/length of entry-link elements
+            expect($('.entry-link').length).toBeGreaterThan(0);
+            done();
+         });
+    });
+
+    /* TODO: Write a new test suite named "New Feed Selection" */
+    
+    describe('New Feed Selection', function() {
 
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          * Remember, loadFeed() is asynchronous.
          */
+
+         //Holder variables to signify loads
+         var initialLoad;
+         var secondLoad;
+
+         beforeEach(function(done) {
+            //initial feed load - set initial load variable
+            loadFeed(0, function() {
+                initialLoad = true;
+            });
+
+            //second feed load - set second load variable
+            loadFeed(1, function(){
+                secondLoad = true;
+                done();
+            });
+
+
+         });
+
+         it('loads new feed', function(done) {
+            //Make sure first load and second load happened to verify items did change
+            expect(initialLoad).toBe(true);
+            expect(secondLoad).toBe(true);
+            done();
+         });
+    });
+
+
+   
 }());
