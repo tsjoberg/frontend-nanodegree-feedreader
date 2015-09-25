@@ -103,7 +103,30 @@ $(function() {
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
 
-         var contentBefore, contentAfter;
+        beforeEach(function(done) {
+            loadFeed(0, function() {
+                done();
+            });
+        });
+
+        it('at least one entry element after loadFeed', function(done) {
+            //Use jQuery to get the array/length of entry-link elements
+            expect($('.entry-link').length).toBeGreaterThan(0);
+            done();
+        });
+
+    });
+
+    /* TODO: Write a new test suite named "New Feed Selection" */
+    
+    describe('New Feed Selection', function() {
+
+        /* TODO: Write a test that ensures when a new feed is loaded
+         * by the loadFeed function that the content actually changes.
+         * Remember, loadFeed() is asynchronous.
+         */
+
+        var contentBefore, contentAfter;
 
         beforeEach(function(done) {
             loadFeed(0, function() {
@@ -120,42 +143,7 @@ $(function() {
             expect(contentBefore).not.toBe(contentAfter);
             done();
         });
-    });
-
-    /* TODO: Write a new test suite named "New Feed Selection" */
-    
-    describe('New Feed Selection', function() {
-
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
-
-        //Holder variables to signify loads
-        var initialLoad;
-        var secondLoad;
-
-        beforeEach(function(done) {
-            //initial feed load - set initial load variable
-            loadFeed(0, function() {
-                initialLoad = true;
-            });
-
-            //second feed load - set second load variable
-            loadFeed(1, function(){
-                secondLoad = true;
-                done();
-            });
-
-
-        });
-
-        it('loads new feed', function(done) {
-            //Make sure first load and second load happened to verify items did change
-            expect(initialLoad).toBe(true);
-            expect(secondLoad).toBe(true);
-            done();
-        });
+        
     });
    
 }());
